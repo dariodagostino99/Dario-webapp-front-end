@@ -1,4 +1,4 @@
-import {Box, Flex, Heading, ListItem, Text, UnorderedList} from "@chakra-ui/react";
+import { Box, Flex, Heading } from "@chakra-ui/react";
 import LeftMenu from "../components/LeftMenu/LeftMenu";
 
 const Layout = ({ children }) => {
@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
                     <Box width={"1700px"} height={"100px"} backgroundColor={"#95EC7E"}>
                         <Heading as={"h2"} size={"2xl"} ml={10} mt={5}>Dario's Web App</Heading>
                     </Box>
-                    <Box>
+                    <Box mt={10}>
                         {children}
                     </Box>
                 </Flex>

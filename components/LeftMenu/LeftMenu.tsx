@@ -1,5 +1,5 @@
-import {Box, ListItem, UnorderedList} from "@chakra-ui/react";
-import {useRouter} from "next/router";
+import { Box, ListItem, UnorderedList } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 const LeftMenu = () => {
     const router = useRouter();
