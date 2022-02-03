@@ -1,5 +1,5 @@
-import {Box, Button, Checkbox, Flex, Heading, Input, Spinner, Text, useToast} from "@chakra-ui/react";
-import {Controller, set, useForm} from "react-hook-form";
+import {Box, Button, Flex, Heading, Spinner, Text, useToast} from "@chakra-ui/react";
+import {useForm} from "react-hook-form";
 import {useEffect, useState} from "react";
 import {Response} from "next/dist/server/web/spec-compliant/response";
 import DeleteIcon from "../icons/DeleteIcon";
@@ -39,7 +39,7 @@ const TaskManager = () => {
                     getTasks();
                     setLoading(false);
                 }
-                reset();
+                reset({text: ""});
             })
     }
 
@@ -117,66 +117,69 @@ const TaskManager = () => {
                 <Text>The task manager is a list where you can place all the tasks you have to do. It lets you also mark
                     a task as completed and finally delete it</Text>
             </Flex>
-            <TaskManagerPanel handleSubmit={handleSubmit}
-                              onClick={createTask}
-                              control={control}
-                              controllerName={"text"}
-                              placeholder={"Add a task ..."}
-                              style={"create"}
-                              type={"submit"}
-                              children={<AddIcon/>}
-                              button={true}
-                              errors={errors}
-            />
-            <Box borderColor={"black"}
-                 border={"dotted"}
-                 width={"1000px"}
-                 mt={10}
-            />
-            <Flex justifyContent={"center"}
-                  mt={5}
-                  direction={"column"}
-            >
-                {loading && <Spinner/>}
-                {!loading && tasks.length === 0 && <Text>There are no tasks yet! Go add one!</Text>}
-                {!loading && tasks.length !== 0 && tasks.map((t, i) => (
-                    <Flex direction={"row"}
-                          justifyContent={"space-between"}
-                          width={"100%"}
-                          mb={5}
-                          key={i}
-                    >
-                        {viewMode.mode === "Edit" && viewMode.taskId === t.id && (
-                            <Flex>
-                                <TaskManagerPanel control={control}
-                                                  controllerName={"textEdit"}
-                                                  placeholder={"Edit task ..."}
-                                                  button={false}
-                                                  errors={errors}
-                                />
-                                <Flex ml={5} justifyContent={"space-between"} width={"120px"}>
-                                    <Button backgroundColor={"#7278EC"}
-                                            _hover={{backgroundColor: "#151FEE", color: "white"}}
-                                            type={"submit"} onClick={handleSubmit(editTask)}><EditIcon/></Button>
-                                    <Button backgroundColor={"#7278EC"}
-                                            _hover={{backgroundColor: "#151FEE", color: "white"}}
-                                            type={"submit"} onClick={goBack}><ReturnIcon/></Button>
-                                </Flex>
-                            </Flex>
-                        )}
-                        {viewMode.taskId !== t.id && (
-                            <>
-                                <Text _hover={{color: "#151FEE"}} cursor={"pointer"} ml={2} fontSize={20}
-                                      onClick={() => setViewMode({mode: "Edit", taskId: t.id})}>{t.text}</Text>
-                                <Flex justifyContent={"space-between"}>
-                                    <ActionButton onClick={() => deleteTask(t.id)} style={"delete"}
-                                                  children={<DeleteIcon/>}/>
-                                </Flex>
-                            </>
-                        )}
-                    </Flex>
-                ))}
+            <Flex direction={"row"} justifyContent={"space-between"} alignContent={"center"} alignItems={"center"}>
+                <TaskManagerPanel control={control}
+                                  controllerName={"text"}
+                                  placeholder={"Add a task ..."}
+                                  style={"create"}
+                                  errors={errors}
+                                  required={viewMode.mode === "Read"}
+                />
+                <Flex>
+                    <ActionButton onClick={createTask} style={"create"} handleSubmit={handleSubmit}
+                                  children={<AddIcon/>}/>
+                </Flex>
             </Flex>
+            <>
+                <Box borderColor={"black"}
+                     border={"dotted"}
+                     width={"1000px"}
+                />
+                <Flex justifyContent={"center"}
+                      mt={5}
+                      direction={"column"}
+                >
+                    {loading && <Spinner/>}
+                    {!loading && tasks.length === 0 && <Text>There are no tasks yet! Go add one!</Text>}
+                    {!loading && tasks.length !== 0 && tasks.map((t, i) => (
+                        <Flex direction={"row"}
+                              justifyContent={"space-between"}
+                              width={"100%"}
+                              mb={5}
+                              key={i}
+                        >
+                            {viewMode.mode === "Edit" && viewMode.taskId === t.id && (
+                                <Flex>
+                                    <TaskManagerPanel control={control}
+                                                      controllerName={"textEdit"}
+                                                      placeholder={"Edit task ..."}
+                                                      errors={errors}
+                                                      required={true}
+                                    />
+                                    <Flex ml={5} justifyContent={"space-between"} width={"120px"}>
+                                        <Button backgroundColor={"#7278EC"}
+                                                _hover={{backgroundColor: "#151FEE", color: "white"}}
+                                                type={"submit"} onClick={handleSubmit(editTask)}><EditIcon/></Button>
+                                        <Button backgroundColor={"#7278EC"}
+                                                _hover={{backgroundColor: "#151FEE", color: "white"}}
+                                                type={"submit"} onClick={goBack}><ReturnIcon/></Button>
+                                    </Flex>
+                                </Flex>
+                            )}
+                            {viewMode.taskId !== t.id && (
+                                <>
+                                    <Text _hover={{color: "#151FEE"}} cursor={"pointer"} ml={2} fontSize={20}
+                                          onClick={() => setViewMode({mode: "Edit", taskId: t.id})}>{t.text}</Text>
+                                    <Flex justifyContent={"space-between"}>
+                                        <ActionButton onClick={() => deleteTask(t.id)} style={"delete"}
+                                                      children={<DeleteIcon/>}/>
+                                    </Flex>
+                                </>
+                            )}
+                        </Flex>
+                    ))}
+                </Flex>
+            </>
         </>
     )
 }

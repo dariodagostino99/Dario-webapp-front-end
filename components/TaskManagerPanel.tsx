@@ -1,32 +1,26 @@
 import {Controller} from "react-hook-form";
 import {Flex, Input, Text} from "@chakra-ui/react";
 import { ErrorMessage} from "@hookform/error-message";
-import ActionButton from "./ActionButton";
-import {FormError} from "@chakra-ui/theme/components";
 
 type Props = {
-    children?: any;
     errors: any;
     control: any;
     controllerName: string;
     placeholder: string;
-    button: boolean;
-    handleSubmit?: any;
-    onClick?: any;
     style?: "create" | "edit" | "delete" | "return";
-    type?: "button" | "submit" | "reset";
+    required? : boolean;
 }
 
-const TaskManagerPanel = ({ children, handleSubmit, onClick, control, controllerName, placeholder, style, type, button, errors } : Props) => {
+const TaskManagerPanel = ({ control, controllerName, placeholder, style, errors, required } : Props) => {
     return (
-        <Flex direction={"column"}>
+        <Flex direction={"column"} height={style === "create" && "120px"}>
             <Flex mt={style === "create" && 10}>
                 <>
                     <Controller
                         control={control}
                         name={controllerName}
                         rules={{
-                            required: { value: true, message: 'This field is required*' },
+                            required: { value: required, message: 'This field is required*' },
                         }}
                         render={({
                                      field: {onChange, onBlur, value, name},
@@ -42,11 +36,6 @@ const TaskManagerPanel = ({ children, handleSubmit, onClick, control, controller
                         )}
                     />
                 </>
-                {button && (
-                    <Flex ml={5}>
-                        <ActionButton handleSubmit={handleSubmit} onClick={onClick} children={children} style={style} type={type}/>
-                    </Flex>
-                )}
             </Flex>
             <Text color={"red"} ml={1}>
                 <ErrorMessage

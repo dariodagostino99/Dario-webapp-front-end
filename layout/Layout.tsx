@@ -5,9 +5,9 @@ const Layout = ({ children }) => {
     return (
         <>
             <title>Dario's web app</title>
-            <Flex direction={"row"} backgroundColor={"#DFEBDC"}>
-                <Box width={"100%"} height="1007px" backgroundColor="#7ECEEC">
-                    <Flex mt={135} ml={10}>
+            <Flex direction={"row"} backgroundColor={"#DFEBDC"} overflow={"auto"}>
+                <Box width={"100%"} height="auto" minHeight={"1008px"} backgroundColor={"#7ECEEC"}>
+                    <Flex mt={135} ml={5}>
                         <LeftMenu />
                     </Flex>
                 </Box>

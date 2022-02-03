@@ -7,12 +7,14 @@ type Props = {
     onClick: any;
     style: "create" | "edit" | "delete" | "return";
     type?: "button" | "submit" | "reset";
+    size?: "small" | "regular" | "large";
 }
 
-const ActionButton = ({ children, handleSubmit, onClick, style, type } : Props) => {
+const ActionButton = ({ children, handleSubmit, onClick, style, type, size } : Props) => {
     const format = ButtonStylePicker.pickStyle(style);
+    const width = ButtonStylePicker.choseSize(size);
     return (
-        <Button backgroundColor={format.backgroundColor} _hover={{backgroundColor: format.hoverBackgroundColor, color: format.hoverColor}}
+        <Button width={width} backgroundColor={format.backgroundColor} _hover={{backgroundColor: format.hoverBackgroundColor, color: format.hoverColor}}
                 type={type} onClick={handleSubmit ? handleSubmit(onClick) : onClick}>{children}</Button>
     )
 }

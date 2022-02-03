@@ -12,5 +12,14 @@ export default class ButtonStylePicker {
         }
     }
 
-
+    static choseSize(size: string){
+        switch (size){
+            case "small":
+                return "200px";
+            case "regular":
+                return "400px";
+            case "large":
+                return "600px";
+        }
+    }
 }
