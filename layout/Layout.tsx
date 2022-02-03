@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
         <>
             <title>Dario's web app</title>
             <Flex direction={"row"} backgroundColor={"#DFEBDC"}>
-                <Box width={"350px"} height="1007px" backgroundColor="#7ECEEC">
+                <Box width={"100%"} height="1007px" backgroundColor="#7ECEEC">
                     <Flex mt={135} ml={10}>
                         <LeftMenu />
                     </Flex>

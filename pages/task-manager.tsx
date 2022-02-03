@@ -1,23 +1,23 @@
 import {Box, Button, Checkbox, Flex, Heading, Input, Spinner, Text, useToast} from "@chakra-ui/react";
-import {Controller, useForm} from "react-hook-form";
+import {Controller, set, useForm} from "react-hook-form";
 import {useEffect, useState} from "react";
 import {Response} from "next/dist/server/web/spec-compliant/response";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
-import AddIcon from "../icons/AddIcon";
 import ReturnIcon from "../icons/ReturnIcon";
+import TaskManagerPanel from "../components/TaskManagerPanel";
+import ActionButton from "../components/ActionButton";
+import AddIcon from "../icons/AddIcon";
 
 const TaskManager = () => {
-    const {control, handleSubmit, reset} = useForm();
+    const {control, handleSubmit, reset, formState: {errors}} = useForm();
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
     const toast = useToast()
     const [viewMode, setViewMode] = useState({mode: "Read", taskId: null});
 
     useEffect(() => {
-        setLoading(true);
         getTasks();
-        setLoading(false);
     }, [])
 
     const goBack = () => {
@@ -25,6 +25,7 @@ const TaskManager = () => {
     }
 
     const createTask = (formData: any) => {
+        setLoading(true);
         const options = {
             method: "POST",
             body: JSON.stringify(formData),
@@ -36,6 +37,7 @@ const TaskManager = () => {
             .then((response: Response) => {
                 if (response.ok) {
                     getTasks();
+                    setLoading(false);
                 }
                 reset();
             })
@@ -115,29 +117,17 @@ const TaskManager = () => {
                 <Text>The task manager is a list where you can place all the tasks you have to do. It lets you also mark
                     a task as completed and finally delete it</Text>
             </Flex>
-            <Flex mt={10}>
-                <>
-                    <Controller
-                        control={control}
-                        name="text"
-                        render={({
-                                     field: {onChange, onBlur, value, name},
-                                 }) => (
-                            <Input placeholder={"Add a task ..."}
-                                   value={value}
-                                   onChange={onChange}
-                                   name={name}
-                                   required={true}
-                                   backgroundColor={"white"}
-                            />
-                        )}
-                    />
-                </>
-                <Flex ml={5}>
-                    <Button backgroundColor={"#9DF58E"} _hover={{backgroundColor: "#47F527", color: "white"}}
-                            type={"submit"} onClick={handleSubmit(createTask)}><AddIcon/></Button>
-                </Flex>
-            </Flex>
+            <TaskManagerPanel handleSubmit={handleSubmit}
+                              onClick={createTask}
+                              control={control}
+                              controllerName={"text"}
+                              placeholder={"Add a task ..."}
+                              style={"create"}
+                              type={"submit"}
+                              children={<AddIcon/>}
+                              button={true}
+                              errors={errors}
+            />
             <Box borderColor={"black"}
                  border={"dotted"}
                  width={"1000px"}
@@ -158,24 +148,12 @@ const TaskManager = () => {
                     >
                         {viewMode.mode === "Edit" && viewMode.taskId === t.id && (
                             <Flex>
-                                <>
-                                    <Controller
-                                        control={control}
-                                        name="textEdit"
-                                        render={({
-                                                     field: {onChange, onBlur, value, name},
-                                                 }) => (
-                                            <Input placeholder={"Edit task ..."}
-                                                   value={value}
-                                                   onChange={onChange}
-                                                   name={name}
-                                                   required={true}
-                                                   backgroundColor={"white"}
-                                                   width={"860px"}
-                                            />
-                                        )}
-                                    />
-                                </>
+                                <TaskManagerPanel control={control}
+                                                  controllerName={"textEdit"}
+                                                  placeholder={"Edit task ..."}
+                                                  button={false}
+                                                  errors={errors}
+                                />
                                 <Flex ml={5} justifyContent={"space-between"} width={"120px"}>
                                     <Button backgroundColor={"#7278EC"}
                                             _hover={{backgroundColor: "#151FEE", color: "white"}}
@@ -188,17 +166,11 @@ const TaskManager = () => {
                         )}
                         {viewMode.taskId !== t.id && (
                             <>
-                                <Text _hover={{color: "#151FEE"}} cursor={"pointer"} ml={2}
+                                <Text _hover={{color: "#151FEE"}} cursor={"pointer"} ml={2} fontSize={20}
                                       onClick={() => setViewMode({mode: "Edit", taskId: t.id})}>{t.text}</Text>
                                 <Flex justifyContent={"space-between"}>
-                                    <Button backgroundColor={"#F07171"}
-                                            _hover={{background: "#F10C0C"}}
-                                            onClick={() => {
-                                                deleteTask(t.id)
-                                            }}
-                                    >
-                                        <DeleteIcon/>
-                                    </Button>
+                                    <ActionButton onClick={() => deleteTask(t.id)} style={"delete"}
+                                                  children={<DeleteIcon/>}/>
                                 </Flex>
                             </>
                         )}
