@@ -68,16 +68,32 @@ const LeftMenu = () => {
                   mt={10}
                   alignItems={"center"}
                   alignContent={"center"}
-                  width={"82px"}
+                  width={"75px"}
                   _hover={{color: "black"}}
                   color={selected === 4 ? "black" : "white"}
                   cursor={"pointer"}
                   onClick={() => {
                       onSelected(4);
+                      onClick("http://localhost:3000/snake");
+                  }}
+            >
+                <GameIcon selected={selected === 4}/>
+                <Text fontSize={15}>Snake</Text>
+            </Flex>
+            <Flex justifyContent={"space-between"}
+                  mt={10}
+                  alignItems={"center"}
+                  alignContent={"center"}
+                  width={"82px"}
+                  _hover={{color: "black"}}
+                  color={selected === 5 ? "black" : "white"}
+                  cursor={"pointer"}
+                  onClick={() => {
+                      onSelected(5);
                       onClick("http://localhost:3000/articles");
                   }}
             >
-                <NewspaperIcon selected={selected === 4}/>
+                <NewspaperIcon selected={selected === 5}/>
                 <Text fontSize={15}>Articles</Text>
             </Flex>
         </Flex>
