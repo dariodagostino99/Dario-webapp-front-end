@@ -117,7 +117,7 @@ const TaskManager = () => {
                 <Text>The task manager is a list where you can place all the tasks you have to do. It lets you also mark
                     a task as completed and finally delete it</Text>
             </Flex>
-            <Flex direction={"row"} justifyContent={"space-between"} alignContent={"center"} alignItems={"center"}>
+            <Flex direction={"row"} justifyContent={"space-between"} alignContent={"center"} alignItems={"center"} >
                 <TaskManagerPanel control={control}
                                   controllerName={"text"}
                                   placeholder={"Add a task ..."}
@@ -144,7 +144,7 @@ const TaskManager = () => {
                     {!loading && tasks.length !== 0 && tasks.map((t, i) => (
                         <Flex direction={"row"}
                               justifyContent={"space-between"}
-                              width={"100%"}
+                              width={"50vw"}
                               mb={5}
                               key={i}
                         >

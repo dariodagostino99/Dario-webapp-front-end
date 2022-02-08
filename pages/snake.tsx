@@ -1,14 +1,18 @@
-import {Box, Flex, Heading, Text} from "@chakra-ui/react";
+import {Box, Button, Flex, Heading, Text, useToast} from "@chakra-ui/react";
 import Snake from "../components/Snake";
 import Food from "../components/Food";
 import {useEffect, useState} from "react";
 import ActionButton from "../components/ActionButton";
 import ReturnIcon from "../icons/ReturnIcon";
+import {useForm} from "react-hook-form";
+import useAuthorization from "../hooks/useAuthorization";
+import {router} from "next/client";
 
 
 const SnakeGame = () => {
     const [direction, setDirection] = useState("RIGHT")
     const [score, setScore] = useState(0);
+    const {handleSubmit} = useForm();
     const [snake, setSnake] = useState([
         [0,0],
         [2,0]
@@ -16,6 +20,42 @@ const SnakeGame = () => {
     const [food, setFood] = useState([]);
     const [isGameOver, setIsGameOver] = useState(false)
     const [speed, setSpeed] = useState(100);
+    const user = useAuthorization();
+    const toast = useToast()
+    const [submitted, setSubmitted] = useState(false);
+
+    const onSubmitScore = () => {
+        const options = {
+            method: "POST",
+            body: JSON.stringify({user, score}),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }
+        fetch("http://localhost:8080/v1/snakeGame", options)
+            .then((data) => {
+                if (data.ok){
+                    toast({
+                        title: "Score submitted",
+                        description: "Your score was submitted successfully!",
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
+                        position: "top-right"
+                    })
+                    setSubmitted(true);
+                } else {
+                    toast({
+                        title: "Internal server error!",
+                        description: "The score was not submitted, try again later.",
+                        status: "error",
+                        duration: 3000,
+                        isClosable: true,
+                        position: "top-right"
+                    })
+                }
+            })
+    }
 
     const onPlayAgain = () => {
         setSnake([
@@ -27,6 +67,7 @@ const SnakeGame = () => {
         setIsGameOver(false);
         setDirection("RIGHT");
         setFood(spawnFood());
+        setSubmitted(false);
     }
 
     const onKeyDown = (e) => {
@@ -140,15 +181,25 @@ const SnakeGame = () => {
 
     return(
         <>
-            <Text fontSize={20} mb={2}>{`Score: ${score}`}</Text>
+            <Flex justifyContent={"space-between"} alignContent={"center"} alignItems={"center"} width={"300px"}>
+                <Text fontSize={20} mb={2}>{`Score: ${score}`}</Text>
+                <Button mb={2} _hover={{backgroundColor: "#647394", color: "white"}} onClick={() => router.push("/snake-leaderboard")}>See Leaderboard</Button>
+            </Flex>
             <Box width={"800px"} height={"800px"} border={"solid"} borderColor={"black"} position={"relative"} alignItems={"center"}>
                 <Snake dots={snake}/>
                 <Food dots={food} />
                 {isGameOver && (
-                    <Flex justifyContent={"center"} direction={"column"} textAlign={"center"} alignContent={"center"} alignItems={"center"}>
-                        <Heading color={"red"} alignItems={"center"} mt={300}>You Lose!</Heading>
-                        <Text ml={5} mb={3} fontSize={30} textAlign={"center"} >Your score was: {score}</Text>
-                        <ActionButton children={<ReturnIcon />} onClick={onPlayAgain} style={"return"} />
+                    <Flex justifyContent={"center"} direction={"column"} textAlign={"center"} alignContent={"center"} alignItems={"center"} padding={60}>
+                        <Box border={"solid"} padding={10} backgroundColor={"#9E496D"} position={"absolute"} zIndex={10}>
+                            <Heading color={"#2C262D"} alignItems={"center"}>You Lose!</Heading>
+                            <Text ml={5} mb={3} fontSize={30} textAlign={"center"} >Your score was: {score}</Text>
+                            <Flex direction={"row"} justifyContent={"space-evenly"}>
+                                <ActionButton children={<ReturnIcon />} onClick={onPlayAgain} style={"return"} />
+                                {user && !submitted && (
+                                    <Button onClick={handleSubmit(onSubmitScore)} _hover={{backgroundColor:"#647394", color: "white"}}>Submit</Button>
+                                )}
+                            </Flex>
+                        </Box>
                     </Flex>
                 )}
             </Box>

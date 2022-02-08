@@ -31,7 +31,7 @@ const TaskManagerPanel = ({ control, controllerName, placeholder, style, errors,
                                    name={name}
                                    required={true}
                                    backgroundColor={"white"}
-                                   width={style === "create" ? "925px" : "860px"}
+                                   width={style === "create" ? "900px" : "820px"}
                             />
                         )}
                     />
