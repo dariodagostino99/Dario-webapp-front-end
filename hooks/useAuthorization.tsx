@@ -1,74 +1,62 @@
 import {useEffect, useState} from "react";
 import {useToast} from "@chakra-ui/react";
 import {useRouter} from "next/router";
-import {set} from "react-hook-form";
 
 
 const useAuthorization = () => {
     const [user, setUser] = useState(null);
+    const [authToken, setAuthToken] = useState(null);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
 
     useEffect(() => {
         const currentUser = localStorage.getItem("user");
+        const authToken = localStorage.getItem("authToken");
         if (currentUser !== "null") {
             setUser(JSON.parse(currentUser));
         }
+        if (authToken !== "null") {
+            setAuthToken(JSON.parse(authToken));
+        }
     }, []);
 
-    const onLogOut = () => {
-        setLoading(true);
+    const onLogOut = async () => {
         localStorage.setItem("user", null);
+        localStorage.setItem("authToken", null);
         const currentUser = localStorage.getItem("user");
+        const authToken = localStorage.getItem("authToken");
         setUser(JSON.parse(currentUser));
-        setLoading(false);
+        setAuthToken(JSON.parse(authToken));
     }
 
-    const onLogIn = (formData: any) => {
-        setLoading(true);
+    const onLogIn = async (formData: any) => {
         const options = {
             method: "GET"
         }
-        fetch(`http://localhost:8080/v1/users/${formData.email}/${formData.password}`, options)
-            .then((response: Response) => {
-                if (response.ok) {
-                    response.json().then((data) => {
-                        const user = JSON.stringify(data);
-                        localStorage.setItem("user", user);
-                        setUser(JSON.parse(user));
-                        onRefreshPage("/");
-                        setLoading(false);
-                    })
-                } else {
-                    toast({
-                        title: "User not found",
-                        description: "The account does no exists.",
-                        status: "error",
-                        duration: 3000,
-                        isClosable: true,
-                        position: "top-right"
-                    })
-                    setLoading(false);
-                }
-            })
+        const user = await fetch(`http://localhost:8080/v1/users/${formData.email}/${formData.password}`, options).then(response => response.json());
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+        //
+        const authorization = await fetch(`http://localhost:8080/v1/authorization/${user.id}`, options).then(response => response.json());
+        localStorage.setItem("authToken", JSON.stringify(authorization.authToken));
+        setAuthToken(authorization.authToken);
     }
 
     const onRefreshPage = (redirect?: string) => {
         setLoading(true);
-        if (redirect !== undefined){
+        if (redirect !== undefined) {
             router.push(redirect).then(() => {
                 location.reload();
-                setLoading(false);
             });
         } else {
             location.reload();
-            setLoading(false);
         }
+        setLoading(false);
     }
 
     return (
-        {user, onLogOut, onLogIn, onRefreshPage, loading}
+        { user, onLogOut, onRefreshPage, loading, onLogIn, authToken }
     );
 }
 

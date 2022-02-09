@@ -4,7 +4,7 @@ import {ErrorMessage} from "@hookform/error-message";
 import ActionButton from "../../components/ActionButton";
 import AddIcon from "../../icons/AddIcon";
 import ReturnIcon from "../../icons/ReturnIcon";
-import {responseSymbol} from "next/dist/server/web/spec-compliant/fetch-event";
+import useAuthorization from "../../hooks/useAuthorization";
 
 const Articles = () => {
     const {control, handleSubmit, reset, formState: {errors}} = useForm();

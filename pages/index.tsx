@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 export default function Home() {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-    const baseUrl = "http://localhost:3000/articles"
+    const baseUrl = "http://localhost:3000/articles";
 
     useEffect(() => {
         getAllArticles();
@@ -26,10 +26,10 @@ export default function Home() {
     return(
         <Flex direction={"column"}>
             {loading && <Spinner />}
-            {data.length === 0 && !loading &&(
+            {!loading && data.length === 0 && (
                 <Text fontSize={20}>There are no articles yet. Go ahead and create one!</Text>
             )}
-            {data.length > 0 && !loading && data.map((a) => (
+            {!loading && data.length > 0 && data.map((a) => (
                 <Flex justifyContent={"space-between"} width={"1000px"}>
                     <Link mb={10} fontSize={30} href={`${baseUrl}/${a.id}`}>{`${baseUrl}/${a.id}`}</Link>
                     <Text fontSize={30}> ....................................................................... </Text>

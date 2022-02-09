@@ -2,15 +2,13 @@ import { Box, Button, Flex, Heading, Input, Link, Text } from "@chakra-ui/react"
 import { Controller, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import useAuthorization from "../hooks/useAuthorization";
-import {useRouter} from "next/router";
 
 const LogIn = () => {
     const { control, handleSubmit, formState: {errors} } = useForm();
-    const { user, onLogIn, onRefreshPage } = useAuthorization();
-    const router = useRouter();
+    const { onLogIn, onRefreshPage } = useAuthorization();
 
     const onResponsiveLogIn = (formData: any) => {
-        onLogIn(formData);
+        onLogIn(formData).then(() => onRefreshPage("/"));
     }
 
     return(
