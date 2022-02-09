@@ -1,4 +1,4 @@
-import {Flex, Link, Text} from "@chakra-ui/react";
+import {Flex, Link, Spinner, Text} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 
 export default function Home() {
@@ -25,10 +25,11 @@ export default function Home() {
 
     return(
         <Flex direction={"column"}>
-            {data.length === 0 && (
+            {loading && <Spinner />}
+            {data.length === 0 && !loading &&(
                 <Text fontSize={20}>There are no articles yet. Go ahead and create one!</Text>
             )}
-            {data.length > 0 && data.map((a) => (
+            {data.length > 0 && !loading && data.map((a) => (
                 <Flex justifyContent={"space-between"} width={"1000px"}>
                     <Link mb={10} fontSize={30} href={`${baseUrl}/${a.id}`}>{`${baseUrl}/${a.id}`}</Link>
                     <Text fontSize={30}> ....................................................................... </Text>

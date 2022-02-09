@@ -1,11 +1,12 @@
 import {Box, Button, Flex, Heading, Input, Link, Text, useToast} from "@chakra-ui/react";
 import {Controller, useForm} from "react-hook-form";
+import {ErrorMessage} from "@hookform/error-message";
 
 const BASE_URL = process.env.LOCAL_HOST_URL;
 
 const SignIn = () => {
     const toast = useToast();
-    const {control, handleSubmit, reset} = useForm();
+    const {control, handleSubmit, reset, formState: {errors}} = useForm();
     const onSignIn = (formData: any) => {
         const options = {
             method: "POST",
@@ -56,10 +57,16 @@ const SignIn = () => {
                                    name={name}
                                    required={true}
                                    backgroundColor={"white"}
-                                   mb={5}
                             />
                         )}
                     />
+                    <Text color={"red"} ml={1} mb={5}>
+                        <ErrorMessage
+                            errors={errors}
+                            name={"username"}
+                            render={({ message }) => <p>{message}</p>}
+                        />
+                    </Text>
                 </>
                 <>
                     <Heading as={"h2"} size={"lg"}>Email</Heading>
@@ -74,13 +81,19 @@ const SignIn = () => {
                                  }) => (
                             <Input value={value}
                                    onChange={onChange}
-                                   name={name}
+                                   name={"email"}
                                    required={true}
                                    backgroundColor={"white"}
-                                   mb={5}
                             />
                         )}
                     />
+                    <Text color={"red"} ml={1} mb={5}>
+                        <ErrorMessage
+                            errors={errors}
+                            name={"email"}
+                            render={({ message }) => <p>{message}</p>}
+                        />
+                    </Text>
                 </>
                 <>
                     <Heading as={"h2"} size={"lg"}>Password</Heading>
@@ -98,11 +111,17 @@ const SignIn = () => {
                                    name={name}
                                    required={true}
                                    backgroundColor={"white"}
-                                   mb={5}
                                    type={"password"}
                             />
                         )}
                     />
+                    <Text color={"red"} ml={1} mb={5}>
+                        <ErrorMessage
+                            errors={errors}
+                            name={"password"}
+                            render={({ message }) => <p>{message}</p>}
+                        />
+                    </Text>
                 </>
                 <Button onClick={handleSubmit(onSignIn)} type={"submit"}>Sign in!</Button>
             </Box>

@@ -20,7 +20,7 @@ const SnakeGame = () => {
     const [food, setFood] = useState([]);
     const [isGameOver, setIsGameOver] = useState(false)
     const [speed, setSpeed] = useState(100);
-    const user = useAuthorization();
+    const { user } = useAuthorization();
     const toast = useToast()
     const [submitted, setSubmitted] = useState(false);
 
