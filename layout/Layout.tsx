@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
                         {user !== null && (
                             <Flex direction={"row"} justifyContent={"space-between"} width={"120px"} alignItems={"center"}>
                                 <BellIcon />
-                                <Image src={user.profileImage} border={"solid"} borderRadius={"50%"} width={"60px"} height={"60px"} cursor={"pointer"} onClick={() => router.push(`/profile/${user.username}`)} />
+                                <Image src={user?.userProfile?.profileImageUrl} border={"solid"} borderRadius={"50%"} width={"60px"} height={"60px"} cursor={"pointer"} onClick={() => router.push(`/profile/${user.username}`)} />
                             </Flex>
                         )}
                         {user === null && (

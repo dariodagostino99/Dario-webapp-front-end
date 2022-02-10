@@ -1,8 +1,8 @@
 import {Box, Button, Flex, Heading, Text, useToast} from "@chakra-ui/react";
-import Snake from "../components/Snake";
-import Food from "../components/Food";
+import Snake from "../components/Snake/Snake";
+import Food from "../components/Snake/Food";
 import {useEffect, useState} from "react";
-import ActionButton from "../components/ActionButton";
+import ActionButton from "../components/Buttons/ActionButton";
 import ReturnIcon from "../icons/ReturnIcon";
 import {useForm} from "react-hook-form";
 import useAuthorization from "../hooks/useAuthorization";

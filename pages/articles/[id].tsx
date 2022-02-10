@@ -1,7 +1,7 @@
 import {Box, Flex, Heading, Input, Spinner, Text, Textarea, useToast} from "@chakra-ui/react";
 import {Controller, useForm} from "react-hook-form";
 import {ErrorMessage} from "@hookform/error-message";
-import ActionButton from "../../components/ActionButton";
+import ActionButton from "../../components/Buttons/ActionButton";
 import AddIcon from "../../icons/AddIcon";
 import ReturnIcon from "../../icons/ReturnIcon";
 import {responseSymbol} from "next/dist/server/web/spec-compliant/fetch-event";

@@ -5,7 +5,7 @@ import ScissorsIcon from "../icons/ScissorsIcon";
 import ComputerIcon from "../icons/ComputerIcon";
 import {useState} from "react";
 import RockPaperScissorsHelper from "../helpers/RockPaperScissorsHelper";
-import ActionButton from "../components/ActionButton";
+import ActionButton from "../components/Buttons/ActionButton";
 import ReturnIcon from "../icons/ReturnIcon";
 
 

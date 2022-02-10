@@ -9,9 +9,10 @@ type Props = {
     placeholder: string;
     style?: "create" | "edit" | "delete" | "return";
     required? : boolean;
+    width?: string
 }
 
-const TaskManagerPanel = ({ control, controllerName, placeholder, style, errors, required } : Props) => {
+const InputFormPanel = ({ control, controllerName, placeholder, style, errors, required, width } : Props) => {
     return (
         <Flex direction={"column"} height={style === "create" && "120px"}>
             <Flex mt={style === "create" && 10}>
@@ -31,7 +32,7 @@ const TaskManagerPanel = ({ control, controllerName, placeholder, style, errors,
                                    name={name}
                                    required={true}
                                    backgroundColor={"white"}
-                                   width={style === "create" ? "900px" : "820px"}
+                                   width={style === "create" ? "900px" : width}
                             />
                         )}
                     />
@@ -48,4 +49,4 @@ const TaskManagerPanel = ({ control, controllerName, placeholder, style, errors,
     )
 }
 
-export default TaskManagerPanel;
+export default InputFormPanel;

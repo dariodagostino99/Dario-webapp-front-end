@@ -5,8 +5,8 @@ import {Response} from "next/dist/server/web/spec-compliant/response";
 import DeleteIcon from "../icons/DeleteIcon";
 import EditIcon from "../icons/EditIcon";
 import ReturnIcon from "../icons/ReturnIcon";
-import TaskManagerPanel from "../components/TaskManagerPanel";
-import ActionButton from "../components/ActionButton";
+import InputFormPanel from "../components/Commons/InputFormPanel";
+import ActionButton from "../components/Buttons/ActionButton";
 import AddIcon from "../icons/AddIcon";
 
 const TaskManager = () => {
@@ -118,12 +118,12 @@ const TaskManager = () => {
                     a task as completed and finally delete it</Text>
             </Flex>
             <Flex direction={"row"} justifyContent={"space-between"} alignContent={"center"} alignItems={"center"} >
-                <TaskManagerPanel control={control}
-                                  controllerName={"text"}
-                                  placeholder={"Add a task ..."}
-                                  style={"create"}
-                                  errors={errors}
-                                  required={viewMode.mode === "Read"}
+                <InputFormPanel control={control}
+                                controllerName={"text"}
+                                placeholder={"Add a task ..."}
+                                style={"create"}
+                                errors={errors}
+                                required={viewMode.mode === "Read"}
                 />
                 <Flex>
                     <ActionButton onClick={createTask} style={"create"} handleSubmit={handleSubmit}
@@ -150,11 +150,11 @@ const TaskManager = () => {
                         >
                             {viewMode.mode === "Edit" && viewMode.taskId === t.id && (
                                 <Flex>
-                                    <TaskManagerPanel control={control}
-                                                      controllerName={"textEdit"}
-                                                      placeholder={"Edit task ..."}
-                                                      errors={errors}
-                                                      required={true}
+                                    <InputFormPanel control={control}
+                                                    controllerName={"textEdit"}
+                                                    placeholder={"Edit task ..."}
+                                                    errors={errors}
+                                                    required={true}
                                     />
                                     <Flex ml={5} justifyContent={"space-between"} width={"120px"}>
                                         <Button backgroundColor={"#7278EC"}

@@ -1,5 +1,5 @@
 import {Button, Flex, Input} from "@chakra-ui/react";
-import ButtonStylePicker from "../helpers/ButtonStylePicker";
+import ButtonStylePicker from "../../helpers/ButtonStylePicker";
 
 type Props = {
     children: any;
