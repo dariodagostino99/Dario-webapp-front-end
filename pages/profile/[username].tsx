@@ -14,29 +14,26 @@ import {Controller, useForm} from "react-hook-form";
 import {ErrorMessage} from "@hookform/error-message";
 import DeleteIcon from "../../icons/DeleteIcon";
 import InputFormPanel from "../../components/Commons/InputFormPanel";
+import {isDisabled} from "@chakra-ui/utils";
 
-export async function getServerSideProps(context) {
-    const {username} = context.query;
-    return {
-        props: {username}
-    }
-}
 
 type Props = {
-    username: string;
 }
 
-const Profile = ({username}: Props) => {
+const Profile = ({}: Props) => {
     const {control, watch, handleSubmit, formState: {errors}, reset} = useForm();
     const {user, onLogOut, onRefreshPage, authToken} = useAuthorization();
     const router = useRouter();
+    const {username} = router.query;
     const [viewType, setViewType] = useState({mode: "VIEW"});
     const [socialMediaList, setSocialMediaList] = useState([]);
     const watchSelect = watch("socialMedia");
     const [isUsernameRequired, setIsUsernameRequired] = useState(false);
-    const watchUsername = watch("username");
     const [isDescriptionRequired, setIsDescriptionRequired] = useState(false);
+    const watchUsername = watch("username");
     const watchDescription = watch("description");
+    const [isDescriptionEnabled, setIsDescriptionEnabled] = useState(false);
+    const [isUsernameEnabled, setIsUsernameEnabled] = useState(false);
 
     useEffect(() => {
         setViewType({mode: "VIEW"})
@@ -103,6 +100,7 @@ const Profile = ({username}: Props) => {
         const data = await fetch("http://localhost:8080/v1/users/profile", options).then((response) => response.json());
         localStorage.setItem("user", JSON.stringify(data));
         setViewType({mode: "VIEW"})
+        router.push("/").then(() => router.reload());
     }
 
     if (user === null) {
@@ -187,25 +185,31 @@ const Profile = ({username}: Props) => {
                     <>
                         <Box mb={5} width={"50%"}>
                             <Heading mb={5} as={"h2"} size={"lg"}>Description</Heading>
-                            <Controller
-                                control={control}
-                                name={"description"}
-                                rules={{
-                                    required: {value: isDescriptionRequired, message: 'This field is required*'},
-                                }}
-                                render={({
-                                             field: {onChange, onBlur, value, name},
-                                         }) => (
-                                    <Input value={value}
-                                           onChange={onChange}
-                                           name={name}
-                                           required={true}
-                                           backgroundColor={"white"}
-                                           placeholder={"Description ..."}
-                                           // defaultValue={user?.userProfile.description}
-                                    />
-                                )}
-                            />
+                            <Flex>
+                                <Controller
+                                    control={control}
+                                    name={"description"}
+                                    rules={{
+                                        required: {value: isDescriptionRequired, message: 'This field is required*'},
+                                    }}
+                                    render={({
+                                                 field: {onChange, onBlur, value, name},
+                                             }) => (
+                                        <Input value={value}
+                                               onChange={onChange}
+                                               name={name}
+                                               required={isDescriptionRequired}
+                                               backgroundColor={"white"}
+                                               placeholder={"Description ..."}
+                                               isDisabled={!isDescriptionEnabled}
+                                               defaultValue={isDisabled && user.userProfile.description}
+                                        />
+                                    )}
+                                />
+                                <ActionButton onClick={() => {
+                                    setIsDescriptionEnabled((prev) => !prev);
+                                }} style={"edit"} children={<EditIcon />} />
+                            </Flex>
                             <Text color={"red"} ml={1}>
                                 <ErrorMessage
                                     errors={errors}

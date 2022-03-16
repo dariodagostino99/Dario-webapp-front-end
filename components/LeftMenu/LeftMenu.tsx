@@ -5,6 +5,7 @@ import TaskIcon from "../../icons/TaskIcon";
 import {useState} from "react";
 import GameIcon from "../../icons/GameIcon";
 import NewspaperIcon from "../../icons/NewspaperIcon";
+import MoneyIcon from "../../icons/MoneyIcon";
 
 const LeftMenu = () => {
     const router = useRouter();
@@ -95,6 +96,22 @@ const LeftMenu = () => {
             >
                 <NewspaperIcon selected={selected === 5}/>
                 <Text fontSize={15}>Articles</Text>
+            </Flex>
+            <Flex justifyContent={"space-between"}
+                  mt={10}
+                  alignItems={"center"}
+                  alignContent={"center"}
+                  width={"90px"}
+                  _hover={{color: "black"}}
+                  color={selected === 6 ? "black" : "white"}
+                  cursor={"pointer"}
+                  onClick={() => {
+                      onSelected(6);
+                      onClick("http://localhost:3000/currencies/eth");
+                  }}
+            >
+                <MoneyIcon selected={selected === 6}/>
+                <Text fontSize={15}>Currency</Text>
             </Flex>
         </Flex>
     )
